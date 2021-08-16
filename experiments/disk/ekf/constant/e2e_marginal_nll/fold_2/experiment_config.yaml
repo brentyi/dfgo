@@ -1,0 +1,15 @@
+!!python/object:lib.disk.experiment_config.EkfExperimentConfig
+batch_size: 32
+dataset_fold: 2
+experiment_identifier: disk/ekf/constant/e2e_marginal_nll/fold_{dataset_fold}
+learning_rate: 0.0001
+loss: !!python/object/apply:lib.disk.experiment_config.EkfLoss
+- E2E_MARGINAL_NLL
+max_gradient_norm: 10.0
+noise_model: !!python/object/apply:lib.disk.experiment_config.NoiseModelEnum
+- CONSTANT
+num_epochs: 30
+pretrained_virtual_sensor_identifier: disk/pretrain_virtual_sensor/fold_{dataset_fold}
+random_seed: 94305
+train_sequence_length: 20
+warmup_steps: 50

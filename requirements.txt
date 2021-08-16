@@ -1,0 +1,12 @@
+jax
+jaxlib
+jaxlie
+git+git://github.com/brentyi/jaxfg@master
+jax_dataclasses
+tqdm
+numpy
+git+git://github.com/brentyi/datargs@master
+fannypack
+torch
+termcolor
+types-termcolor

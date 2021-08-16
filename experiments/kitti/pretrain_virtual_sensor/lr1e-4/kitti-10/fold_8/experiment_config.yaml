@@ -1,0 +1,10 @@
+!!python/object:lib.kitti.experiment_config.CNNExperimentConfig
+batch_size: 32
+dataset_fold: 8
+experiment_name: lr1e-4/kitti-10/mse
+learning_rate: 0.0001
+loss: !!python/object/apply:lib.kitti.experiment_config.CNNLossEnum
+- MSE
+max_gradient_norm: 10.0
+num_epochs: 90
+random_seed: 94305

@@ -1,0 +1,9 @@
+!!python/object:lib.disk.experiment_config.VirtualSensorPretrainingExperimentConfig
+batch_size: 32
+dataset_fold: 9
+experiment_name: disk/pretrain_virtual_sensor/fold_{dataset_fold}
+learning_rate: 0.0001
+max_gradient_norm: 10.0
+num_epochs: 30
+random_seed: 94305
+warmup_steps: 50

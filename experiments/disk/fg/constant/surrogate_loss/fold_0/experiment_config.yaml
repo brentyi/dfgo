@@ -1,0 +1,15 @@
+!!python/object:lib.disk.experiment_config.FactorGraphExperimentConfig
+batch_size: 32
+dataset_fold: 0
+experiment_identifier: disk/fg/constant/surrogate_loss/fold_{dataset_fold}
+learning_rate: 0.0001
+loss: !!python/object/apply:lib.disk.experiment_config.FactorGraphLossEnum
+- SURROGATE_LOSS
+max_gradient_norm: 10.0
+noise_model: !!python/object/apply:lib.disk.experiment_config.NoiseModelEnum
+- CONSTANT
+num_epochs: 10
+pretrained_virtual_sensor_identifier: disk/pretrain_virtual_sensor/fold_{dataset_fold}
+random_seed: 94305
+train_sequence_length: 10
+warmup_steps: 50

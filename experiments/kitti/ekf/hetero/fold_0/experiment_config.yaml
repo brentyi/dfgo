@@ -1,0 +1,14 @@
+!!python/object:lib.kitti.experiment_config.EkfExperimentConfig
+batch_size: 16
+dataset_fold: 0
+experiment_name: hetero
+learning_rate: 0.0001
+max_gradient_norm: 1.0
+noise_model: !!python/object/apply:lib.kitti.experiment_config.NoiseModelEnum
+- HETEROSCEDASTIC
+num_epochs: 30
+pretrained_virtual_sensor_identifier: kitti/pretrain_virtual_sensor/lr1e-4/kitti-10/fold_{dataset_fold}
+random_seed: 94305
+train_sequence_length: 10
+use_overfitting_dataset: false
+warmup_steps: 50

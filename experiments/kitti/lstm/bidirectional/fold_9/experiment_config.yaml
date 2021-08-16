@@ -1,0 +1,12 @@
+!!python/object:lib.kitti.experiment_config.LstmExperimentConfig
+batch_size: 32
+bidirectional: true
+dataset_fold: 9
+experiment_name: bidirectional
+learning_rate: 0.0001
+max_gradient_norm: 1.0
+num_epochs: 60
+random_seed: 94305
+train_sequence_length: 10
+use_overfitting_dataset: false
+warmup_steps: 50

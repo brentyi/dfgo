@@ -1,0 +1,21 @@
+!!python/object:lib.kitti.experiment_config.FactorGraphExperimentConfig
+batch_size: 16
+dataset_fold: 7
+experiment_name: hetero/surrogate_vel/ground_truth
+learning_rate: 0.0001
+loss_config: !!python/object:lib.kitti.experiment_config.SurrogateLossConfig
+  conjugate_gradient_tolerance: 1.0e-05
+  gn_initialization_strategy: !!python/object/apply:lib.kitti.experiment_config.InitializationStrategyEnum
+  - GROUND_TRUTH
+  gn_steps: 5
+  supervision: !!python/object/apply:lib.kitti.experiment_config.SurrogateLossSupervisionEnum
+  - VELOCITY
+max_gradient_norm: 1.0
+noise_model: !!python/object/apply:lib.kitti.experiment_config.NoiseModelEnum
+- HETEROSCEDASTIC
+num_epochs: 30
+pretrained_virtual_sensor_identifier: kitti/pretrain_virtual_sensor/lr1e-4/kitti-10/fold_{dataset_fold}
+random_seed: 94305
+train_sequence_length: 10
+use_overfitting_dataset: false
+warmup_steps: 50
