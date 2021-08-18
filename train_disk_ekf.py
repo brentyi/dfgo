@@ -1,6 +1,6 @@
-"""Filter training script for disk task. Note that this is implemented as an EKF, but
-since the dynamics and observation model are linear we end up with a standard Kalman
-filter."""
+"""Filter training script for visual tracking task. Note that this is implemented as an
+EKF, but since the dynamics and observation model are linear we end up with a standard
+Kalman filter."""
 
 import fannypack
 from tqdm.auto import tqdm
@@ -38,7 +38,6 @@ def main(config: disk.experiment_config.EkfExperimentConfig) -> None:
         batch: disk.data.DiskStructNormalized
         for batch in train_dataloader:
             # Validation + checkpointing
-            # We intentionally do this before the first training step :)
             if train_state.steps % 200 == 0:
                 validation = validation.validate_log_and_checkpoint_if_best(train_state)
 

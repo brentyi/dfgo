@@ -1,3 +1,6 @@
+"""Helper for computing and logging validation statistics, and only recording
+checkpoints when they improve."""
+
 import dataclasses
 from typing import Any, Callable, Dict, Generic, Optional, Tuple, TypeVar
 

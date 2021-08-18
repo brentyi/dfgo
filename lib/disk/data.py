@@ -1,3 +1,5 @@
+"""Structures (pytrees) for working with disk data."""
+
 import jax
 import jax_dataclasses
 import numpy as onp

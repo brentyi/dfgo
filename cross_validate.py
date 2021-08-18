@@ -52,7 +52,7 @@ def get_valid_experiments(experiment_paths: Optional[Tuple[str, ...]]) -> List[s
 
 
 def convert_radians_to_degrees(metrics: MetricDict) -> MetricDict:
-    """Convert metrics in radians to degrees.
+    """Convert metrics in radians to degrees, which are easier to read. Hacky.
 
     Example input:
         {'m_per_m': 1.0, 'rad_per_m': 3.14159265}
@@ -70,7 +70,8 @@ def convert_radians_to_degrees(metrics: MetricDict) -> MetricDict:
 
 
 def mean_and_std_error(values: List[float]) -> str:
-    """Compute a mean and standard error given a set of floats. Format and return as a string."""
+    """Compute a mean and standard error given a set of floats. Format and return as a
+    string."""
     return f"{onp.mean(values):.4f} ± {onp.std(values) / len(values):.4f}"
 
 

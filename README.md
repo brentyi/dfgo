@@ -1,8 +1,8 @@
 # Differentiable Factor Graph Optimization for Learning Smoothers
 
-![Figure describing the overall training pipeline proposed by our IROS paper. Contains five sections, arranged left to right: (1) system models, (2) factor graphs for state estimation, (3) MAP inference, (4) state estimates, and (5) errors with respect to ground-truth. Arrows show how gradients are backpropagated from right to left, starting directly from the final stage (error with respect to ground-truth) back to parameters of the system models.](./data/paper_figure1.png)
-
 [![mypy](https://github.com/brentyi/dfgo/actions/workflows/mypy.yml/badge.svg)](https://github.com/brentyi/dfgo/actions/workflows/mypy.yml)
+
+![Figure describing the overall training pipeline proposed by our IROS paper. Contains five sections, arranged left to right: (1) system models, (2) factor graphs for state estimation, (3) MAP inference, (4) state estimates, and (5) errors with respect to ground-truth. Arrows show how gradients are backpropagated from right to left, starting directly from the final stage (error with respect to ground-truth) back to parameters of the system models.](./data/paper_figure1.png)
 
 <!-- vim-markdown-toc GFM -->
 
@@ -33,9 +33,9 @@ Code release for our IROS 2021 conference paper:
 </td></tr></table>
 
 <sup>1</sup><em>Stanford University,
-{brentyi,michellelee,robertom,bohg}&commat;cs.stanford.edu</em><br />
+`{brentyi,michellelee,robertom,bohg}@cs.stanford.edu`</em><br />
 <sup>2</sup><em>Max Planck Institute for Intelligent Systems,
-akloss&commat;tue.mpg.de</em>
+`akloss@tue.mpg.de`</em>
 
 ---
 
@@ -47,8 +47,8 @@ Significant chunks of the code written for this paper have been factored out of
 this repository and released as standalone libraries, which may be useful for
 building on our work. You can find each of them linked here:
 
-- **[jaxfg](https://github.com/brentyi/jaxfg)** is our core factor graph and
-  sparse nonlinear optimization library.
+- **[jaxfg](https://github.com/brentyi/jaxfg)** is our core factor graph
+  optimization library.
 - **[jaxlie](https://github.com/brentyi/jaxlie)** is our Lie theory library for
   working with rigid body transformations.
 - **[jax_dataclasses](https://github.com/brentyi/jax_dataclasses)** is our
@@ -60,29 +60,32 @@ building on our work. You can find each of them linked here:
 
 ## Status
 
-Included in this repo:
+Included in this repo for the disk task:
 
-- [x] Tracking task smoother training & results
+- [x] Smoother training & results
   - [x] Training: `python train_disk_fg.py --help`
   - [x] Evaluation:
         `python cross_validate.py --experiment-paths ./experiments/disk/fg/**/`
-- [x] Tracking task EKF training & results
+- [x] Filter baseline training & results
   - [x] Training: `python train_disk_ekf.py --help`
   - [x] Evaluation:
         `python cross_validate.py --experiment-paths ./experiments/disk/ekf/**/`
-- [x] Tracking task LSTM training & results
+- [x] LSTM baseline training & results
   - [x] Training: `python train_disk_lstm.py --help`
   - [x] Evaluation:
         `python cross_validate.py --experiment-paths ./experiments/disk/lstm/**/`
-- [x] Visual odometry task smoother training & results (including ablations)
+
+And, for the visual odometry task:
+
+- [x] Smoother training & results (including ablations)
   - [x] Training: `python train_kitti_fg.py --help`
   - [x] Evaluation:
         `python cross_validate.py --experiment-paths ./experiments/kitti/fg/**/`
-- [x] Visual odometry task EKF training & results
+- [x] EKF baseline training & results
   - [x] Training: `python train_kitti_ekf.py --help`
   - [x] Evaluation:
         `python cross_validate.py --experiment-paths ./experiments/kitti/ekf/**/`
-- [x] Visual odometry task LSTM training & results
+- [x] LSTM baseline training & results
   - [x] Training: `python train_kitti_lstm.py --help`
   - [x] Evaluation:
         `python cross_validate.py --experiment-paths ./experiments/kitti/lstm/**/`
@@ -90,9 +93,9 @@ Included in this repo:
 Note that `**/` indicates a recursive glob in zsh. This can be emulated in
 bash>4 via the globstar option (`shopt -q globstar`).
 
-We've done our best to make research code easy to parse, but it's still being
-iterated on! If you have questions, suggestions, or any general comments, please
-reach out or file an issue.
+We've done our best to make our research code easy to parse, but it's still
+being iterated on! If you have questions, suggestions, or any general comments,
+please reach out or file an issue.
 
 ## Setup
 
@@ -191,7 +194,7 @@ All evaluation metrics are recorded at train time. The `cross_validate.py`
 script can be used to compute metrics across folds:
 
 ```bash
-# Summarize experiments with mean and standard error only
+# Summarize all experiments with means and standard errors of recorded metrics.
 python cross_validate.py
 
 # Include statistics for every fold -- this is much more data!
@@ -199,7 +202,7 @@ python cross_validate.py --disaggregate
 
 # We can also glob for a partial set of experiments; for example, all of the
 # disk experiments.
-#320MB  Note that the ** wildcard may fail in bash; see above for a fix.
+# Note that the ** wildcard may fail in bash; see above for a fix.
 python cross_validate.py --experiment-paths ./experiments/disk/**/
 ```
 
@@ -207,8 +210,9 @@ python cross_validate.py --experiment-paths ./experiments/disk/**/
 
 We'd like to thank [Rika Antonova](https://contactrika.github.io/),
 [Kevin Zakka](https://github.com/kevinzakka),
-[Nick Heppert](https://github.com/SuperN1ck), and
-[Angelina Wang](https://angelina-wang.github.io/) for discussions and feedback
+[Nick Heppert](https://github.com/SuperN1ck),
+[Angelina Wang](https://angelina-wang.github.io/), and
+[Philipp Wu](https://github.com/wuphilipp) for discussions and feedback
 on both our paper and codebase. Our software design also benefits from ideas
 from several open-source projects, including
 [Sophus](https://github.com/strasdat/Sophus), [GTSAM](https://gtsam.org/),

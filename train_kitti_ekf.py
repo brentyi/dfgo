@@ -17,7 +17,10 @@ def main(config: kitti.experiment_config.EkfExperimentConfig) -> None:
 
     # Load dataset
     train_dataloader = kitti.data_loading.make_subsequence_dataloader(
-        config, split=kitti.data_loading.DatasetSplit.TRAIN_VIRTUAL_SENSOR_HOLDOUT
+        # We use a chunk of the train set that was held out during pretraining -- this
+        # will result in uncertainties that generalize better to unseen data.
+        config,
+        split=kitti.data_loading.DatasetSplit.TRAIN_VIRTUAL_SENSOR_HOLDOUT,
     )
     val_dataset = kitti.data_loading.make_subsequence_eval_dataset(config)
 
@@ -34,7 +37,6 @@ def main(config: kitti.experiment_config.EkfExperimentConfig) -> None:
         batch: kitti.data.KittiStructNormalized
         for batch in train_dataloader:
             # Validation + checkpointing
-            # We intentionally do this before this first training step :)
             if train_state.steps % 50 == 0:
                 validation = validation.validate_log_and_checkpoint_if_best(train_state)
 

@@ -19,28 +19,15 @@ def main(config: kitti.experiment_config.LstmExperimentConfig) -> None:
     # Load dataset
     train_dataloader = kitti.data_loading.make_subsequence_dataloader(
         # Note that we use all of the training data here! Because there's no pretrained
-        # virtual sensor
+        # virtual sensor.
         config,
         split=kitti.data_loading.DatasetSplit.TRAIN_ALL,
-    )
-    train_partial_dataloader = kitti.data_loading.make_subsequence_dataloader(
-        config,
-        split=kitti.data_loading.DatasetSplit.TRAIN_VIRTUAL_SENSOR_HOLDOUT,  # For debugging, this overlaps with TRAIN_ALL
     )
     val_dataloader = kitti.data_loading.make_subsequence_dataloader(
         config, split=kitti.data_loading.DatasetSplit.VALIDATION
     )
 
     # Helper for validation + metric-aware checkpointing
-    validation_debugging = validation_tracker.ValidationTracker[
-        kitti.training_lstm.TrainState
-    ](
-        name="train_partial",
-        experiment=experiment,
-        compute_metrics=kitti.validation_lstm.make_compute_metrics(
-            train_partial_dataloader  # Should overfit
-        ),
-    )
     validation = validation_tracker.ValidationTracker[kitti.training_lstm.TrainState](
         name="val",
         experiment=experiment,
@@ -53,13 +40,6 @@ def main(config: kitti.experiment_config.LstmExperimentConfig) -> None:
         batch: kitti.data.KittiStructNormalized
         for batch in train_dataloader:
             # Validation + checkpointing
-            # We intentionally do this before this first training step :)
-            if train_state.steps % 2000 == 0:
-                validation_debugging = (
-                    validation_debugging.validate_log_and_checkpoint_if_best(
-                        train_state
-                    )
-                )
             if train_state.steps % 200 == 0:
                 validation = validation.validate_log_and_checkpoint_if_best(train_state)
 

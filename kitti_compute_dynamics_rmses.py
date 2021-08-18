@@ -1,5 +1,9 @@
-"""Script for computing the expected RMSE of the analytical dynamics model. Uses entire
-dataset."""
+"""Script for printing the expected RMSE of the analytical dynamics model.
+
+Uses entire dataset, so this is a little bit wrong in that it leaks test set information
+into training. But this doesn't impact results in practice: the learned values (5
+scalars) should only used for initialization, and end up being tuned end-to-end (on only
+the train set)."""
 
 import jax
 import jaxlie
@@ -47,7 +51,11 @@ def compute_subsequence_sum_squared_error(
 def main() -> None:
     print("Loading data...")
     trajectories = kitti.data_loading.load_trajectories_from_ids(
-        range(11), verbose=False
+        # Note: for the kitti-10 dataset, we should really be skipping trajectory #1.
+        # But this is not really important, because the RMSEs we compute are only being
+        # used for initialization.
+        range(11),
+        verbose=False,
     )
     subsequences = kitti.data_loading.make_disjoint_subsequences(
         trajectories, subsequence_length=100

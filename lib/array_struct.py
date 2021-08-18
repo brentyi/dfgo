@@ -1,5 +1,4 @@
-"""Helper for constructing array structures with shape checks at runtime.
-"""
+"""Helper for constructing array structures with shape checks at runtime."""
 
 
 import dataclasses

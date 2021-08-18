@@ -1,4 +1,5 @@
-"""Pre-training script for disk task virtual sensors."""
+"""Pre-training script for visual tracking task virtual sensors."""
+
 import functools
 
 import fannypack

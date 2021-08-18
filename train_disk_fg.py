@@ -1,4 +1,4 @@
-"""Factor graph training script for disk task."""
+"""Factor graph training script for visual tracking task."""
 
 import fannypack
 from tqdm.auto import tqdm
@@ -36,7 +36,6 @@ def main(config: disk.experiment_config.FactorGraphExperimentConfig) -> None:
         batch: disk.data.DiskStructNormalized
         for batch in train_dataloader:
             # Validation + checkpointing
-            # We intentionally do this before the first training step :)
             if train_state.steps % 200 == 0:
                 validation = validation.validate_log_and_checkpoint_if_best(train_state)
 

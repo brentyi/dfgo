@@ -1,4 +1,4 @@
-"""Pre-training script for KITTI task virtual sensors."""
+"""Pre-training script for visual odometry task virtual sensors."""
 
 import fannypack
 from jax import numpy as jnp
@@ -47,7 +47,6 @@ def main(
         batch: kitti.data.KittiStructNormalized
         for batch in train_dataloader:
             # Validation + checkpointing
-            # We intentionally do this before this first training step :)
             if train_state.steps % 500 == 0:
                 validation = validation.validate_log_and_checkpoint_if_best(train_state)
 

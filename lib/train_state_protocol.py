@@ -1,3 +1,5 @@
+"""Structural supertype for training states."""
+
 from typing import Any, Generic, Protocol, Tuple, TypeVar
 
 from . import array_struct, experiment_files

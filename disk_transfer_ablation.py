@@ -1,3 +1,12 @@
+"""Run noise transfer experiment.
+
+We load a noise model trained end-to-end in a filter, then use a factor graph for
+evaluation. Similarly, we load a noise model trained end-to-end in a factor graph, then
+use a filter for evaluation.
+
+Results are written to disk, and can be inspected `./cross_validate.py`.
+"""
+
 import dataclasses
 
 import jax_dataclasses

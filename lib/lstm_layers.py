@@ -1,4 +1,4 @@
-"""Network definitions for LSTM layers.
+"""Module definitions for LSTM layers.
 
 Borrows from: https://github.com/google/flax/blob/main/examples/sst2/models.py
 """

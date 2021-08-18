@@ -1,4 +1,4 @@
-"""Structures and classes for working with data."""
+"""Structures (pytrees) for working with KITTI data."""
 
 import dataclasses
 from typing import List, TypeVar

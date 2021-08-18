@@ -1,3 +1,5 @@
+"""Simple experiment manager for managing metadata, logs, and checkpoints."""
+
 import dataclasses
 import pathlib
 import shutil
