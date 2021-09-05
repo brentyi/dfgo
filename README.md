@@ -121,8 +121,8 @@ We use Python 3.8 and miniconda for development.
    In addition to JAX and the first-party dependencies listed above, note that
    this also includes various other helpers:
 
-   - **[datargs](https://github.com/brentyi/datargs)** (currently forked) is
-     super useful for building type-safe argument parsers.
+   - **[datargs](https://github.com/brentyi/datargs)** is super useful for
+     building type-safe argument parsers.
    - **[torch](https://github.com/pytorch/pytorch)**'s `Dataset` and
      `DataLoader` interfaces are used for training.
    - **[fannypack](https://github.com/brentyi/fannypack)** contains some
@@ -212,9 +212,9 @@ We'd like to thank [Rika Antonova](https://contactrika.github.io/),
 [Kevin Zakka](https://github.com/kevinzakka),
 [Nick Heppert](https://github.com/SuperN1ck),
 [Angelina Wang](https://angelina-wang.github.io/), and
-[Philipp Wu](https://github.com/wuphilipp) for discussions and feedback
-on both our paper and codebase. Our software design also benefits from ideas
-from several open-source projects, including
+[Philipp Wu](https://github.com/wuphilipp) for discussions and feedback on both
+our paper and codebase. Our software design also benefits from ideas from
+several open-source projects, including
 [Sophus](https://github.com/strasdat/Sophus), [GTSAM](https://gtsam.org/),
 [Ceres Solver](http://ceres-solver.org/),
 [minisam](https://github.com/dongjing3309/minisam), and

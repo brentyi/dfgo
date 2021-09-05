@@ -1,12 +1,13 @@
-jax
-jaxlib
+jax==0.2.18
+jaxlib==0.1.70
 jaxlie
 git+git://github.com/brentyi/jaxfg@master
 jax_dataclasses
 tqdm
-numpy
-git+git://github.com/brentyi/datargs@master
+datargs>=0.10.0
 fannypack
 torch
 termcolor
+# tensorflow is needed for tensorboard logging in JAX
+tensorflow
 types-termcolor
