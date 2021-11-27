@@ -3,6 +3,7 @@
 Borrows from: https://github.com/google/flax/blob/main/examples/sst2/models.py
 """
 
+import functools
 from typing import Tuple
 
 import jax
@@ -13,7 +14,7 @@ from jax import numpy as jnp
 class UniLstm(nn.Module):
     """A simple unidirectional LSTM."""
 
-    @jax.partial(
+    @functools.partial(
         nn.transforms.scan,
         variable_broadcast="params",
         in_axes=1,

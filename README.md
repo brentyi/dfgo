@@ -121,13 +121,10 @@ We use Python 3.8 and miniconda for development.
    In addition to JAX and the first-party dependencies listed above, note that
    this also includes various other helpers:
 
-   - **[datargs](https://github.com/brentyi/datargs)** is super useful for
-     building type-safe argument parsers.
    - **[torch](https://github.com/pytorch/pytorch)**'s `Dataset` and
      `DataLoader` interfaces are used for training.
    - **[fannypack](https://github.com/brentyi/fannypack)** contains some
-     utilities for downloading datasets, working with PDB, polling repository
-     commit hashes.
+     utilities for working with hdf5 files.
 
 The `requirements.txt` provided will install the CPU version of JAX by default.
 For CUDA support, please see [instructions](http://github.com/google/jax) from

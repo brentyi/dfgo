@@ -1,7 +1,7 @@
 """Structures (pytrees) for working with KITTI data."""
 
 import dataclasses
-from typing import List, TypeVar
+from typing import List, TypeVar, cast
 
 import jax
 import jax_dataclasses
@@ -11,24 +11,36 @@ import torch
 from jax import numpy as jnp
 from typing_extensions import Annotated
 
-from .. import array_struct
-
 _KittiStructType = TypeVar("_KittiStructType", bound="_KittiStruct")
+
+null_array = cast(jnp.ndarray, None)
+# ^Placeholder value to be used as a dataclass field default, to enable structs that
+# contain only a partial set of values.
+#
+# An intuitive solution is to populate fields with a dummy default array like
+# `jnp.empty(shape=(0,))`), but this can cause silent broadcasting/tracing issues.
+#
+# So instead we use `None` as the default value. Which is nice because it leads to loud
+# runtime errors when uninitialized values are accidentally used.
+#
+# Note that the correct move would be to hint fields as `Optional[jnp.ndarray]`, but
+# this would result in code that's littered with `assert __ is not None` statements
+# and/or casts. Which is annoying. So instead we just pretend `None` is an array,
 
 
 @jax_dataclasses.pytree_dataclass
-class _KittiStruct(array_struct.ShapeAnnotatedStruct):
+class _KittiStruct(jax_dataclasses.EnforcedAnnotationsMixin):
     """Base class for storing KITTI data, which can either be normalized or not."""
 
     # Annotated[..., ...] attaches an expected shape to each field. (which may end up
     # being prefixed by a shared set of batch axes)
-    image: Annotated[jnp.ndarray, (50, 150, 3)] = array_struct.null_array
-    image_diff: Annotated[jnp.ndarray, (50, 150, 3)] = array_struct.null_array
-    x: Annotated[jnp.ndarray, ()] = array_struct.null_array
-    y: Annotated[jnp.ndarray, ()] = array_struct.null_array
-    theta: Annotated[jnp.ndarray, ()] = array_struct.null_array
-    linear_vel: Annotated[jnp.ndarray, ()] = array_struct.null_array
-    angular_vel: Annotated[jnp.ndarray, ()] = array_struct.null_array
+    image: Annotated[jnp.ndarray, (50, 150, 3), jnp.floating] = null_array
+    image_diff: Annotated[jnp.ndarray, (50, 150, 3), jnp.floating] = null_array
+    x: Annotated[jnp.ndarray, (), jnp.floating] = null_array
+    y: Annotated[jnp.ndarray, (), jnp.floating] = null_array
+    theta: Annotated[jnp.ndarray, (), jnp.floating] = null_array
+    linear_vel: Annotated[jnp.ndarray, (), jnp.floating] = null_array
+    angular_vel: Annotated[jnp.ndarray, (), jnp.floating] = null_array
 
     def get_stacked_velocity(self) -> jnp.ndarray:
         """Return 2-channel velocity."""
@@ -40,7 +52,7 @@ class _KittiStruct(array_struct.ShapeAnnotatedStruct):
 
 # Constants for data normalization. We again perform a lot of type abuse...
 
-_DATASET_MEANS = _KittiStruct(
+_DATASET_MEANS = dict(
     image=onp.array([88.91195932, 94.08863257, 92.80115751]),  # type: ignore
     image_diff=onp.array([-0.00086295, -0.00065804, -0.00133435]),  # type: ignore
     x=195.02545,  # type: ignore
@@ -50,7 +62,7 @@ _DATASET_MEANS = _KittiStruct(
     angular_vel=-0.000439872,  # type: ignore
 )
 
-_DATASET_STD_DEVS = _KittiStruct(
+_DATASET_STD_DEVS = dict(
     image=onp.array([74.12011514, 76.13433045, 77.88847008]),  # type: ignore
     image_diff=onp.array([38.63185147, 39.0655375, 38.7856255]),  # type: ignore
     x=294.42093,  # type: ignore
@@ -73,8 +85,8 @@ class KittiStructNormalized(_KittiStruct):
         """Unnormalize contents."""
 
         def _unnorm(value, mean, std):
-            if value is array_struct.null_array:
-                return array_struct.null_array
+            if value is null_array:
+                return null_array
 
             if scale_only:
                 return value * std
@@ -85,8 +97,8 @@ class KittiStructNormalized(_KittiStruct):
             **jax.tree_map(
                 _unnorm,
                 vars(self),
-                vars(_DATASET_MEANS),
-                vars(_DATASET_STD_DEVS),
+                _DATASET_MEANS,
+                _DATASET_STD_DEVS,
             )
         )
 
@@ -133,8 +145,8 @@ class KittiStructRaw(_KittiStruct):
         """Normalize contents."""
 
         def _norm(value, mean, std):
-            if value is array_struct.null_array:
-                return array_struct.null_array
+            if value is null_array:
+                return null_array
 
             if scale_only:
                 return value / std
@@ -145,8 +157,8 @@ class KittiStructRaw(_KittiStruct):
             **jax.tree_map(
                 _norm,
                 vars(self),
-                vars(_DATASET_MEANS),
-                vars(_DATASET_STD_DEVS),
+                _DATASET_MEANS,
+                _DATASET_STD_DEVS,
             )
         )
 

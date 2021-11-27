@@ -1,11 +1,12 @@
 from typing import Any, Tuple
 
+import fifteen
 import jax
 import jax_dataclasses
 import optax
 from jax import numpy as jnp
 
-from .. import experiment_files, utils
+from .. import utils
 from . import data, experiment_config, networks_lstm
 
 Pytree = Any
@@ -63,10 +64,10 @@ class TrainState:
     @jax.jit
     def training_step(
         self, batch: data.DiskStructNormalized
-    ) -> Tuple["TrainState", experiment_files.TensorboardLogData]:
+    ) -> Tuple["TrainState", fifteen.experiments.TensorboardLogData]:
 
         # Shape checks
-        (batch_size, sequence_length) = batch.check_shapes_and_get_batch_axes()
+        (batch_size, sequence_length) = batch.get_batch_axes()
         assert sequence_length == self.config.train_sequence_length
 
         def compute_loss(
@@ -87,7 +88,7 @@ class TrainState:
         )
 
         # Log data
-        log_data = experiment_files.TensorboardLogData(
+        log_data = fifteen.experiments.TensorboardLogData(
             scalars={
                 "train/training_loss": loss,
                 "train/gradient_norm": optax.global_norm(grads),

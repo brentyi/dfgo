@@ -27,7 +27,7 @@ def make_compute_metrics(
         for batch in eval_dataloader:
             batch_unnorm = batch.unnormalize()
 
-            (N, T) = batch.check_shapes_and_get_batch_axes()
+            (N, T) = batch.get_batch_axes()
 
             regressed_poses: jaxlie.SE2 = jax.jit(
                 train_state.lstm.apply, static_argnames=("train",)

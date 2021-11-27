@@ -20,7 +20,7 @@ class KittiLstm(nn.Module):
 
     @nn.compact
     def __call__(self, inputs: data.KittiStructNormalized, train: bool) -> jaxlie.SE2:
-        N, T = inputs.check_shapes_and_get_batch_axes()
+        N, T = inputs.get_batch_axes()
         stacked_images = inputs.get_stacked_image()
         assert stacked_images.shape == (N, T, 50, 150, 6)
 

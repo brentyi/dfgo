@@ -1,10 +1,12 @@
 """Experiment configurations for KITTI task.
-"""
+
+Note: we'd likely structure these very differently if we were to rewrite this code,
+particularly to replace inheritance with nested dataclasses for common fields. (the
+latter is now supported in `dcargs`)"""
+
 import dataclasses
 import enum
 from typing import Literal, Union
-
-import datargs
 
 from .. import utils
 
@@ -92,17 +94,15 @@ class InitializationStrategyEnum(utils.StringEnum):
     NAIVE_BASELINE = enum.auto()
 
 
-@datargs.argsclass(name="joint-nll-loss")
 @dataclasses.dataclass(frozen=True)
 class JointNllLossConfig:
     """Joint NLL loss configuration.
 
-    Empty dataclass to match syntax used for defining subparsers in datargs."""
+    Empty dataclass to match syntax used for defining subparsers in dcargs."""
 
     pass
 
 
-@datargs.argsclass(name="surrogate-loss")
 @dataclasses.dataclass(frozen=True)
 class SurrogateLossConfig:
     """End-to-end surrogate loss configuration."""

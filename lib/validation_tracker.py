@@ -4,7 +4,9 @@ checkpoints when they improve."""
 import dataclasses
 from typing import Any, Callable, Dict, Generic, Optional, Tuple, TypeVar
 
-from . import experiment_files, train_state_protocol
+import fifteen
+
+from . import train_state_protocol
 
 Pytree = Any
 
@@ -22,7 +24,7 @@ class ValidationTracker(Generic[TrainState]):
     """Helper for tracking+logging validation statistics."""
 
     name: str
-    experiment: experiment_files.ExperimentFiles
+    experiment: fifteen.experiments.Experiment
     compute_metrics: Callable[[TrainState], ValidationMetrics]
 
     lowest_metric: Optional[float] = dataclasses.field(default=None)

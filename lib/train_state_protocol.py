@@ -2,12 +2,13 @@
 
 from typing import Any, Generic, Protocol, Tuple, TypeVar
 
-from . import array_struct, experiment_files
+import fifteen
+import jax_dataclasses
 
 SelfType = TypeVar("SelfType")
 TrainingDataType = TypeVar(
     "TrainingDataType",
-    bound=array_struct.ShapeAnnotatedStruct,
+    bound=jax_dataclasses.EnforcedAnnotationsMixin,
     contravariant=True,
 )
 Pytree = Any
@@ -21,5 +22,5 @@ class TrainStateProtocol(Protocol, Generic[TrainingDataType]):
 
     def training_step(
         self: SelfType, batch: TrainingDataType
-    ) -> Tuple[SelfType, experiment_files.TensorboardLogData]:
+    ) -> Tuple[SelfType, fifteen.experiments.TensorboardLogData]:
         ...

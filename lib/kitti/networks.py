@@ -2,12 +2,12 @@
 
 from typing import Any, NamedTuple, Protocol, Tuple
 
+import fifteen
 import jax
 import numpy as onp
 from flax import linen as nn
 from jax import numpy as jnp
 
-from .. import experiment_files
 from . import data, experiment_config
 
 Pytree = Any
@@ -151,7 +151,7 @@ def load_pretrained_observation_cnn(
     # Note that seed does not matter, because parameters will be read from checkpoint
     model, params = make_observation_cnn(random_seed=0)
 
-    experiment = experiment_files.ExperimentFiles(identifier=experiment_identifier)
+    experiment = fifteen.experiments.Experiment(identifier=experiment_identifier)
     params = experiment.restore_checkpoint(params, prefix="best_val_params_")
 
     return model, params

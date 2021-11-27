@@ -1,12 +1,13 @@
 from typing import Any, Optional, Tuple
 
+import fifteen
 import jax
 import jax_dataclasses
 import jaxfg
 import optax
 from jax import numpy as jnp
 
-from .. import experiment_files, utils
+from .. import utils
 from . import data, experiment_config, fg_system, fg_utils, networks
 
 Pytree = Any
@@ -41,7 +42,7 @@ class TrainState:
     ) -> "TrainState":
         # Load position CNN
         cnn_model, cnn_params = networks.make_position_cnn(seed=config.random_seed)
-        cnn_params = experiment_files.ExperimentFiles(
+        cnn_params = fifteen.experiments.Experiment(
             identifier=config.pretrained_virtual_sensor_identifier.format(
                 dataset_fold=config.dataset_fold
             )
@@ -89,7 +90,7 @@ class TrainState:
         learnable_params: Optional[Pytree] = None,
     ) -> jaxfg.core.StackedFactorGraph:
         # Shape checks
-        (sequence_length,) = trajectory.check_shapes_and_get_batch_axes()
+        (sequence_length,) = trajectory.get_batch_axes()
 
         # Optional parameters default to self.*
         if graph_template is None:
@@ -136,16 +137,16 @@ class TrainState:
     @jax.jit
     def training_step(
         self, batch: data.DiskStructNormalized
-    ) -> Tuple["TrainState", experiment_files.TensorboardLogData]:
+    ) -> Tuple["TrainState", fifteen.experiments.TensorboardLogData]:
 
         # Shape checks
-        (batch_size, sequence_length) = batch.check_shapes_and_get_batch_axes()
+        (batch_size, sequence_length) = batch.get_batch_axes()
         assert sequence_length == self.config.train_sequence_length
 
         def compute_loss_single(
             trajectory: data.DiskStructNormalized,
             learnable_params: Pytree,
-        ) -> Tuple[jnp.ndarray, experiment_files.TensorboardLogData]:
+        ) -> Tuple[jnp.ndarray, fifteen.experiments.TensorboardLogData]:
             graph = self.update_factor_graph(
                 trajectory=trajectory,
                 graph_template=self.graph_template,
@@ -190,7 +191,7 @@ class TrainState:
                     ** 2
                 )
 
-            log_data = experiment_files.TensorboardLogData(
+            log_data = fifteen.experiments.TensorboardLogData(
                 histograms={
                     "regressed_uncertainties": graph.factor_stacks[
                         0
@@ -201,14 +202,14 @@ class TrainState:
 
         def compute_loss(
             learnable_params: Pytree,
-        ) -> Tuple[jnp.ndarray, experiment_files.TensorboardLogData]:
+        ) -> Tuple[jnp.ndarray, fifteen.experiments.TensorboardLogData]:
             losses, log_data = jax.vmap(compute_loss_single, in_axes=(0, None))(
                 batch, learnable_params
             )
             return jnp.mean(losses), log_data
 
         # Compute loss + backprop => apply gradient transforms => update parameters
-        log_data: experiment_files.TensorboardLogData
+        log_data: fifteen.experiments.TensorboardLogData
         (loss, log_data), grads = jax.value_and_grad(compute_loss, has_aux=True)(
             self.learnable_params
         )
@@ -221,8 +222,8 @@ class TrainState:
         )
 
         # Log data
-        log_data = log_data.extend(
-            scalars={
+        log_data = log_data.merge_scalars(
+            {
                 "train/training_loss": loss,
                 "train/gradient_norm": optax.global_norm(grads),
             },

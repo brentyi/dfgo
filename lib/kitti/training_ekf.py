@@ -1,12 +1,13 @@
 from typing import Any, Optional, Tuple
 
+import fifteen
 import jax
 import jax_dataclasses
 import jaxlie
 import optax
 from jax import numpy as jnp
 
-from .. import experiment_files, manifold_ekf, utils
+from .. import manifold_ekf, utils
 from . import data, experiment_config, fg_system, networks
 
 
@@ -121,7 +122,7 @@ class TrainState:
     @jax.jit
     def training_step(
         self, batched_trajectory: data.KittiStructNormalized
-    ) -> Tuple["TrainState", experiment_files.TensorboardLogData]:
+    ) -> Tuple["TrainState", fifteen.experiments.TensorboardLogData]:
         def compute_loss_single(
             learnable_params: Pytree,
             trajectory: data.KittiStructNormalized,
@@ -162,7 +163,7 @@ class TrainState:
         )
 
         # Data to log
-        log_data = experiment_files.TensorboardLogData(
+        log_data = fifteen.experiments.TensorboardLogData(
             scalars={
                 "train/training_loss": loss,
                 "train/gradient_norm": optax.global_norm(grads),
@@ -184,7 +185,7 @@ class TrainState:
         prng_key: PRNGKey,
         learnable_params: Optional[Pytree] = None,
     ) -> fg_system.State:
-        (_timesteps,) = trajectory.check_shapes_and_get_batch_axes()
+        (_timesteps,) = trajectory.get_batch_axes()
 
         # Some type aliases
         Belief = manifold_ekf.MultivariateGaussian[fg_system.State]
@@ -217,7 +218,7 @@ class TrainState:
             cov=jnp.eye(5) * 1e-7,  # This can probably just be zeros
         )
 
-        (timesteps,) = trajectory.check_shapes_and_get_batch_axes()
+        (timesteps,) = trajectory.get_batch_axes()
 
         def ekf_step(
             # carry

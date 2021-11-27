@@ -21,7 +21,7 @@ def _compute_metrics(
     train_state: training_ekf.TrainState,
     trajectory: data.KittiStructNormalized,
 ) -> _ValidationMetrics:
-    (_timesteps,) = trajectory.check_shapes_and_get_batch_axes()
+    (_timesteps,) = trajectory.get_batch_axes()
 
     gt_trajectory_raw = trajectory.unnormalize()
     posterior_states = train_state.run_ekf(
@@ -65,7 +65,7 @@ def make_compute_metrics(
             traj = eval_dataset[i]
 
             # Leading axes: (batch, # timesteps)
-            (timesteps,) = traj.check_shapes_and_get_batch_axes()
+            (timesteps,) = traj.get_batch_axes()
 
             batch_metrics = _compute_metrics(
                 train_state,

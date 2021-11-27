@@ -5,10 +5,10 @@ import pathlib
 from typing import Dict, List, Optional, Tuple
 
 import beautifultable
+import dcargs
+import fifteen
 import numpy as onp
 import termcolor
-
-from lib import experiment_files, utils
 
 MetricDict = Dict[str, float]
 
@@ -130,7 +130,7 @@ def main(args: Args) -> None:
         num_folds = 10
         for fold in range(num_folds):
             # Read evaluation metrics
-            experiment = experiment_files.ExperimentFiles(
+            experiment = fifteen.experiments.Experiment(
                 identifier=f"{experiment_name}/fold_{fold}",
                 verbose=False,
             )
@@ -164,5 +164,5 @@ def main(args: Args) -> None:
 
 
 if __name__ == "__main__":
-    args = utils.parse_args(Args)
+    args = dcargs.parse(Args)
     main(args)

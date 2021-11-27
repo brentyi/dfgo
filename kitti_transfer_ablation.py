@@ -1,9 +1,11 @@
 import dataclasses
 
+import dcargs
+import fifteen
 import jax_dataclasses
 from tqdm.auto import tqdm
 
-from lib import experiment_files, kitti, utils
+from lib import kitti
 
 
 @dataclasses.dataclass
@@ -17,10 +19,10 @@ class Args:
 def main(args: Args) -> None:
     for dataset_fold in tqdm(range(10)):
         # Experiments to transfer noise models across
-        ekf_experiment = experiment_files.ExperimentFiles(
+        ekf_experiment = fifteen.experiments.Experiment(
             identifier=args.ekf_experiment_identifier.format(dataset_fold=dataset_fold)
         ).assert_exists()
-        fg_experiment = experiment_files.ExperimentFiles(
+        fg_experiment = fifteen.experiments.Experiment(
             identifier=args.fg_experiment_identifier.format(dataset_fold=dataset_fold)
         ).assert_exists()
 
@@ -64,14 +66,14 @@ def main(args: Args) -> None:
         )(fg_train_state)
 
         # Write metrics to kitti
-        experiment_files.ExperimentFiles(
+        fifteen.experiments.Experiment(
             identifier=f"kitti/ekf/hetero/trained_on_fg/fold_{dataset_fold}"
         ).clear().write_metadata("best_val_metrics", ekf_metrics)
-        experiment_files.ExperimentFiles(
+        fifteen.experiments.Experiment(
             identifier=f"kitti/fg/hetero/trained_on_ekf/fold_{dataset_fold}"
         ).clear().write_metadata("best_val_metrics", fg_metrics)
 
 
 if __name__ == "__main__":
-    args = utils.parse_args(Args)
+    args = dcargs.parse(Args)
     main(args)

@@ -1,11 +1,12 @@
 from typing import Any, Optional, Tuple
 
+import fifteen
 import jax
 import jax_dataclasses
 import optax
 from jax import numpy as jnp
 
-from .. import experiment_files, manifold_ekf, utils
+from .. import manifold_ekf, utils
 from . import data, experiment_config, fg_system, networks
 
 Pytree = Any
@@ -42,7 +43,7 @@ class TrainState:
     ) -> "TrainState":
         # Load position CNN
         cnn_model, cnn_params = networks.make_position_cnn(seed=config.random_seed)
-        cnn_params = experiment_files.ExperimentFiles(
+        cnn_params = fifteen.experiments.Experiment(
             identifier=config.pretrained_virtual_sensor_identifier.format(
                 dataset_fold=config.dataset_fold
             )
@@ -88,17 +89,17 @@ class TrainState:
     @jax.jit
     def training_step(
         self, batch: data.DiskStructNormalized
-    ) -> Tuple["TrainState", experiment_files.TensorboardLogData]:
+    ) -> Tuple["TrainState", fifteen.experiments.TensorboardLogData]:
 
         # Shape checks
-        (batch_size, sequence_length) = batch.check_shapes_and_get_batch_axes()
+        (batch_size, sequence_length) = batch.get_batch_axes()
         assert sequence_length == self.config.train_sequence_length
 
         def compute_loss_single(
             trajectory: data.DiskStructNormalized,
             learnable_params: Pytree,
         ) -> jnp.ndarray:
-            (timesteps,) = trajectory.check_shapes_and_get_batch_axes()
+            (timesteps,) = trajectory.get_batch_axes()
 
             unnormed_position = (
                 data.DiskStructNormalized(position=trajectory.position)
@@ -164,7 +165,7 @@ class TrainState:
         )
 
         # Log data
-        log_data = experiment_files.TensorboardLogData(
+        log_data = fifteen.experiments.TensorboardLogData(
             scalars={
                 "train/training_loss": loss,
                 "train/gradient_norm": optax.global_norm(grads),
@@ -184,7 +185,7 @@ class TrainState:
         trajectory: data.DiskStructNormalized,
         learnable_params: Optional[Pytree] = None,
     ) -> manifold_ekf.MultivariateGaussian[fg_system.State]:
-        (timesteps,) = trajectory.check_shapes_and_get_batch_axes()
+        (timesteps,) = trajectory.get_batch_axes()
 
         # Some type aliases
         Belief = manifold_ekf.MultivariateGaussian[fg_system.State]

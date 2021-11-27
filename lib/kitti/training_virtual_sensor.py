@@ -1,11 +1,11 @@
 from typing import Optional, Tuple
 
+import fifteen
 import jax
 import jax_dataclasses
 import optax
 from jax import numpy as jnp
 
-from .. import experiment_files
 from . import data, experiment_config, networks
 
 PRNGKey = jnp.ndarray
@@ -113,7 +113,7 @@ class TrainState:
     def training_step(
         self,
         batch: data.KittiStructNormalized,
-    ) -> Tuple["TrainState", experiment_files.TensorboardLogData]:
+    ) -> Tuple["TrainState", fifteen.experiments.TensorboardLogData]:
         """Single training step."""
 
         # Quick shape check
@@ -141,7 +141,7 @@ class TrainState:
             angular_vel=cnn_output[:, 1],
         ).unnormalize()
 
-        log_data = experiment_files.TensorboardLogData(
+        log_data = fifteen.experiments.TensorboardLogData(
             scalars={
                 "train/training_loss": loss,
                 "train/gradient_norm": optax.global_norm(grads),

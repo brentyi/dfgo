@@ -1,12 +1,13 @@
 from typing import Any, Tuple
 
+import fifteen
 import jax
 import jax_dataclasses
 import jaxlie
 import optax
 from jax import numpy as jnp
 
-from .. import experiment_files, utils
+from .. import utils
 from . import data, experiment_config, math_utils, networks_lstm
 
 PRNGKey = jnp.ndarray  # TODO: we should standardize PRNG vs Prng
@@ -77,12 +78,12 @@ class TrainState:
     @jax.jit
     def training_step(
         self, batch: data.KittiStructNormalized
-    ) -> Tuple["TrainState", experiment_files.TensorboardLogData]:
+    ) -> Tuple["TrainState", fifteen.experiments.TensorboardLogData]:
         def compute_loss(
             learnable_params: LearnableParams, prng_key: PRNGKey
-        ) -> Tuple[jnp.ndarray, experiment_files.TensorboardLogData]:
+        ) -> Tuple[jnp.ndarray, fifteen.experiments.TensorboardLogData]:
             """Compute average loss for all trajectories in the batch."""
-            (_N, _T) = batch.check_shapes_and_get_batch_axes()
+            (_N, _T) = batch.get_batch_axes()
 
             batch_unnorm = batch.unnormalize()
 
@@ -112,7 +113,7 @@ class TrainState:
 
             training_loss = translation_loss + rotation_loss
 
-            return training_loss, experiment_files.TensorboardLogData(
+            return training_loss, fifteen.experiments.TensorboardLogData(
                 scalars={
                     "train/translation_loss": translation_loss,
                     "train/rotation_loss": rotation_loss,
@@ -144,9 +145,9 @@ class TrainState:
         )
 
         # Data to log
-        log_data = experiment_files.TensorboardLogData.merge(
+        log_data = fifteen.experiments.TensorboardLogData.merge(
             compute_loss_log_data,
-            experiment_files.TensorboardLogData(
+            fifteen.experiments.TensorboardLogData(
                 scalars={
                     "train/gradient_norm": optax.global_norm(grads),
                 }

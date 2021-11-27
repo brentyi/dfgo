@@ -23,7 +23,7 @@ def _compute_metrics(
     trajectory: data.KittiStructNormalized,
 ) -> _ValidationMetrics:
     # Leading axes: (# timesteps,)
-    assert len(trajectory.check_shapes_and_get_batch_axes()) == 1
+    assert len(trajectory.get_batch_axes()) == 1
 
     graph, _unused = train_state.update_factor_graph(
         graph_template=graph_template,
@@ -93,7 +93,7 @@ def make_compute_metrics(
             traj = eval_dataset[i]
 
             # Leading axes: (batch, # timesteps)
-            (timesteps,) = traj.check_shapes_and_get_batch_axes()
+            (timesteps,) = traj.get_batch_axes()
 
             batch_metrics = _compute_metrics(
                 train_state,

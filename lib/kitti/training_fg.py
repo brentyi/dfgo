@@ -1,13 +1,14 @@
 """Training helpers for KITTI task."""
 from typing import Any, Optional, Tuple
 
+import fifteen
 import jax
 import jax_dataclasses
 import jaxfg
 import optax
 from jax import numpy as jnp
 
-from .. import experiment_files, utils
+from .. import utils
 from . import data, experiment_config, fg_losses, fg_utils, networks
 
 Pytree = Any
@@ -156,11 +157,11 @@ class TrainState:
     @jax.jit
     def training_step(
         self, batched_trajectory: data.KittiStructNormalized
-    ) -> Tuple["TrainState", experiment_files.TensorboardLogData]:
+    ) -> Tuple["TrainState", fifteen.experiments.TensorboardLogData]:
         """Single training step."""
 
         # Shared leading axes should be (batch, timesteps)
-        assert len(batched_trajectory.check_shapes_and_get_batch_axes()) == 2
+        assert len(batched_trajectory.get_batch_axes()) == 2
 
         def compute_loss_single(
             learnable_params: LearnableParams,
@@ -224,7 +225,7 @@ class TrainState:
         # Log data
         regressed_velocities = per_sample_metadata.regressed_velocities
         regressed_uncertainties = per_sample_metadata.regressed_uncertainties
-        log_data = experiment_files.TensorboardLogData(
+        log_data = fifteen.experiments.TensorboardLogData(
             scalars={
                 "train/training_loss": loss,
                 "train/gradient_norm": optax.global_norm(grads),

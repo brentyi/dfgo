@@ -17,6 +17,7 @@ import pathlib
 import sys
 
 import fannypack
+import fifteen
 import numpy as onp
 from PIL import Image
 from tqdm.auto import tqdm
@@ -123,7 +124,7 @@ def load_data(
 
 if __name__ == "__main__":
 
-    fannypack.utils.pdb_safety_net()
+    fifteen.utils.pdb_safety_net()
 
     path: pathlib.Path
     directories = sorted(

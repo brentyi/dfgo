@@ -18,7 +18,7 @@ class DiskLstm(nn.Module):
 
     @nn.compact
     def __call__(self, inputs: data.DiskStructNormalized) -> jnp.ndarray:
-        N, T = inputs.check_shapes_and_get_batch_axes()
+        N, T = inputs.get_batch_axes()
         images = inputs.image
         assert images.shape == (N, T, 120, 120, 3)
 

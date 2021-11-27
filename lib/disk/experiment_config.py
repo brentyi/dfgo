@@ -1,3 +1,9 @@
+"""Experiment configurations for disk task.
+
+Note: we'd structure these very differently if we were to rewrite this code,
+particularly to replace inheritance with nested dataclasses for common fields. (the
+latter is now supported in `dcargs`)"""
+
 import dataclasses
 import enum
 from typing import Literal

@@ -8,7 +8,11 @@ from typing import Iterable, List
 import fannypack
 import jax
 import numpy as onp
-import torch
+
+# For future projects, we probably want to use fifteen.data.DataLoader instead of the
+# torch DataLoader, but keeping the torch one because that's what was used for the paper
+# results.
+import torch.utils.data
 
 from .. import utils
 from . import data, experiment_config
