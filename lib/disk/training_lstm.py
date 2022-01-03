@@ -10,7 +10,6 @@ from .. import utils
 from . import data, experiment_config, networks_lstm
 
 Pytree = Any
-PRNGKey = jnp.ndarray
 
 
 @jax_dataclasses.pytree_dataclass

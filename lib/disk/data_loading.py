@@ -4,6 +4,7 @@ from typing import List, Optional
 
 import fannypack
 import jax
+import numpy as onp
 
 # For future projects, we probably want to use fifteen.data.DataLoader instead of the
 # torch DataLoader, but keeping the torch one because that's what was used for the paper
@@ -93,7 +94,7 @@ def load_trajectories(
 
                 traj = data.DiskStructRaw(
                     **{
-                        field.name: trajectory[field.name]
+                        field.name: trajectory[field.name].astype(onp.float32)
                         for field in dataclasses.fields(data.DiskStructRaw)
                     }
                 ).normalize()

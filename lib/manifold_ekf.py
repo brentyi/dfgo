@@ -135,9 +135,9 @@ class EkfDefinition(Generic[StateType, ObservationType, ControlInputType]):
 
         pred_obs_mean = self.observation_model(belief.mean)
         innovation = self.observation_manifold.boxminus(observation.mean, pred_obs_mean)
-        innovation_cov = C @ belief.cov @ C.T + observation.cov
+        innovation_cov = C @ belief.cov @ C.T + observation.cov  # type: ignore
 
-        K = belief.cov @ C.T @ jnp.linalg.inv(innovation_cov)
+        K = belief.cov @ C.T @ jnp.linalg.inv(innovation_cov)  # type: ignore
 
         with jax_dataclasses.copy_and_mutate(belief) as out:
             out.mean = self.state_manifold.boxplus(belief.mean, K @ innovation)

@@ -1,5 +1,6 @@
 """Neural network definitions, helpers, and related types."""
 
+import pathlib
 from typing import Any, NamedTuple, Protocol, Tuple
 
 import fifteen
@@ -14,7 +15,6 @@ Pytree = Any
 LearnableParams = Pytree
 KittiVirtualSensorParameters = Pytree
 StackedImages = jnp.ndarray
-PRNGKey = jnp.ndarray
 
 relu_layer_init = nn.initializers.kaiming_normal()  # variance = 2.0 / fan_in
 linear_layer_init = nn.initializers.lecun_normal()  # variance = 1.0 / fan_in
@@ -40,7 +40,7 @@ class RegressUncertaintiesFunction(Protocol):
         self,
         learnable_params: Pytree,
         stacked_images: jnp.ndarray,
-        prng_key: jnp.ndarray,
+        prng_key: jax.random.KeyArray,
         train: bool,
     ) -> RegressedUncertainties:
         ...
@@ -56,7 +56,7 @@ class KittiVirtualSensor(nn.Module):
     output_dim: int = 4
 
     @nn.compact
-    def __call__(self, inputs: jnp.ndarray, train: bool) -> jnp.ndarray:
+    def __call__(self, inputs: jnp.ndarray, train: bool) -> jnp.ndarray:  # type: ignore
         x = inputs
         N = x.shape[0]
         assert x.shape == (N, 50, 150, 6), x.shape
@@ -113,15 +113,15 @@ class KittiVirtualSensor(nn.Module):
         x = x.reshape((N, -1))  # type: ignore
 
         # fc1
-        x = nn.Dense(128, kernel_init=relu_layer_init)(x)
+        x = nn.Dense(features=128, kernel_init=relu_layer_init)(x)
         x = nn.relu(x)
 
         # fc2
-        x = nn.Dense(128, kernel_init=relu_layer_init)(x)
+        x = nn.Dense(features=128, kernel_init=relu_layer_init)(x)
         x = nn.relu(x)
 
         # fc3
-        x = nn.Dense(self.output_dim, kernel_init=linear_layer_init)(x)
+        x = nn.Dense(features=self.output_dim, kernel_init=linear_layer_init)(x)
 
         assert x.shape == (N, self.output_dim)
         return x
@@ -151,7 +151,9 @@ def load_pretrained_observation_cnn(
     # Note that seed does not matter, because parameters will be read from checkpoint
     model, params = make_observation_cnn(random_seed=0)
 
-    experiment = fifteen.experiments.Experiment(identifier=experiment_identifier)
+    experiment = fifteen.experiments.Experiment(
+        data_dir=pathlib.Path("./experiments/") / experiment_identifier
+    )
     params = experiment.restore_checkpoint(params, prefix="best_val_params_")
 
     return model, params
@@ -168,7 +170,6 @@ def make_regress_velocities(
 
     def regress_velocities(
         stacked_images: jnp.ndarray,
-        # prng_key: PRNGKey,
     ) -> RegressedVelocities:
         N = stacked_images.shape[0]
         assert stacked_images.shape == (N, 50, 150, 6)
@@ -259,7 +260,7 @@ def make_regress_uncertainties(
         def regress_uncertainties(
             learnable_params: ConstantUncertaintyParams,
             stacked_images: jnp.ndarray,
-            prng_key: jnp.ndarray,
+            prng_key: jax.random.KeyArray,
             train: bool,
         ) -> RegressedUncertainties:
             sequence_length = stacked_images.shape[0]
@@ -286,7 +287,7 @@ def make_regress_uncertainties(
         def regress_uncertainties(
             learnable_params: HeteroscedasticUncertaintyParams,
             stacked_images: jnp.ndarray,
-            prng_key: PRNGKey,
+            prng_key: jax.random.KeyArray,
             train: bool,
         ) -> RegressedUncertainties:
             sequence_length = stacked_images.shape[0]

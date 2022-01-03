@@ -9,7 +9,6 @@ from jax import numpy as jnp
 from . import data, experiment_config, networks
 
 Pytree = Any
-PRNGKey = jnp.ndarray
 
 
 @jax_dataclasses.pytree_dataclass

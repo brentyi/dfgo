@@ -1,6 +1,7 @@
 """Pre-training script for visual tracking task virtual sensors."""
 
 import functools
+import pathlib
 
 import dcargs
 import fifteen
@@ -13,7 +14,8 @@ def main(
     config: disk.experiment_config.VirtualSensorPretrainingExperimentConfig,
 ) -> None:
     experiment = fifteen.experiments.Experiment(
-        identifier=config.experiment_identifier.format(dataset_fold=config.dataset_fold)
+        data_dir=pathlib.Path("./experiments/")
+        / config.experiment_identifier.format(dataset_fold=config.dataset_fold)
     ).clear()
     experiment.write_metadata("experiment_config", config)
     experiment.write_metadata("git_commit_hash", utils.get_git_commit_hash())

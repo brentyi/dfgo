@@ -75,14 +75,14 @@ class MLP(nn.Module):
         return MLP(units=units, layers=layers, output_dim=output_dim)
 
     @nn.compact
-    def __call__(self, inputs: jnp.ndarray):
+    def __call__(self, inputs: jnp.ndarray):  # type: ignore
         x = inputs
 
         for i in range(self.layers):
-            x = nn.Dense(self.units, kernel_init=relu_layer_init)(x)
+            x = nn.Dense(features=self.units, kernel_init=relu_layer_init)(x)
             x = nn.relu(x)
 
-        x = nn.Dense(self.output_dim, kernel_init=linear_layer_init)(x)
+        x = nn.Dense(features=self.output_dim, kernel_init=linear_layer_init)(x)
         return x
 
 
@@ -96,7 +96,7 @@ class DiskVirtualSensor(nn.Module):
     output_dim: int = 2
 
     @nn.compact
-    def __call__(self, inputs: jnp.ndarray):
+    def __call__(self, inputs: jnp.ndarray):  # type: ignore
         x = inputs
         N = x.shape[0]
         assert x.shape == (N, 120, 120, 3), x.shape

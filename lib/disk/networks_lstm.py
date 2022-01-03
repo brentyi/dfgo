@@ -17,13 +17,13 @@ class DiskLstm(nn.Module):
     bidirectional: bool
 
     @nn.compact
-    def __call__(self, inputs: data.DiskStructNormalized) -> jnp.ndarray:
+    def __call__(self, inputs: data.DiskStructNormalized) -> jnp.ndarray:  # type: ignore
         N, T = inputs.get_batch_axes()
         images = inputs.image
         assert images.shape == (N, T, 120, 120, 3)
 
         # Initial carry by encoding ground-truth initial state
-        initial_carry = nn.Dense(32, kernel_init=networks.relu_layer_init)(
+        initial_carry = nn.Dense(features=32, kernel_init=networks.relu_layer_init)(
             jnp.concatenate(
                 [
                     inputs.position[:, 0, :],
@@ -34,9 +34,9 @@ class DiskLstm(nn.Module):
         )
         assert initial_carry.shape == (N, 32)
         initial_carry = nn.relu(initial_carry)
-        initial_carry = nn.Dense(32 * 2, kernel_init=networks.linear_layer_init)(
-            initial_carry
-        )
+        initial_carry = nn.Dense(
+            features=32 * 2, kernel_init=networks.linear_layer_init
+        )(initial_carry)
         initial_carry = (initial_carry[..., :32], initial_carry[..., 32:])
 
         # Image encoder
@@ -54,9 +54,9 @@ class DiskLstm(nn.Module):
             assert x.shape == (N, T, 32)
 
         # Output
-        x = nn.Dense(32, kernel_init=networks.relu_layer_init)(x)
+        x = nn.Dense(features=32, kernel_init=networks.relu_layer_init)(x)
         x = nn.relu(x)
-        x = nn.Dense(2, kernel_init=networks.linear_layer_init)(x)
+        x = nn.Dense(features=2, kernel_init=networks.linear_layer_init)(x)
         assert x.shape == (N, T, 2)
 
         return x

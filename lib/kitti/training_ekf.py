@@ -27,7 +27,6 @@ def make_observation(
 
 
 Pytree = Any
-PRNGKey = jnp.ndarray
 KittiEkf = manifold_ekf.EkfDefinition[fg_system.State, jnp.ndarray, None]
 
 
@@ -47,7 +46,7 @@ class TrainState:
 
     ekf: KittiEkf = jax_dataclasses.static_field()
 
-    prng_key: PRNGKey
+    prng_key: jax.random.KeyArray
     steps: int
     train: bool = jax_dataclasses.static_field()
 
@@ -126,7 +125,7 @@ class TrainState:
         def compute_loss_single(
             learnable_params: Pytree,
             trajectory: data.KittiStructNormalized,
-            prng_key: PRNGKey,
+            prng_key: jax.random.KeyArray,
         ):
             trajectory_unnorm = trajectory.unnormalize()
             estimated_state = self.run_ekf(
@@ -137,7 +136,9 @@ class TrainState:
                 + (estimated_state.y - trajectory_unnorm.y) ** 2
             )
 
-        def compute_loss(learnable_params: Pytree, prng_key: PRNGKey) -> jnp.ndarray:
+        def compute_loss(
+            learnable_params: Pytree, prng_key: jax.random.KeyArray
+        ) -> jnp.ndarray:
             batch_size: int = batched_trajectory.x.shape[0]
             losses = jax.vmap(compute_loss_single, in_axes=(None, 0, 0))(
                 learnable_params,
@@ -182,7 +183,7 @@ class TrainState:
     def run_ekf(
         self,
         trajectory: data.KittiStructRaw,
-        prng_key: PRNGKey,
+        prng_key: jax.random.KeyArray,
         learnable_params: Optional[Pytree] = None,
     ) -> fg_system.State:
         (_timesteps,) = trajectory.get_batch_axes()

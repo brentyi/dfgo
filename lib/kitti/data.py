@@ -96,7 +96,7 @@ class KittiStructNormalized(_KittiStruct):
         return KittiStructRaw(
             **jax.tree_map(
                 _unnorm,
-                vars(self),
+                jax_dataclasses.asdict(self),
                 _DATASET_MEANS,
                 _DATASET_STD_DEVS,
             )
@@ -156,7 +156,7 @@ class KittiStructRaw(_KittiStruct):
         return KittiStructNormalized(
             **jax.tree_map(
                 _norm,
-                vars(self),
+                jax_dataclasses.asdict(self),
                 _DATASET_MEANS,
                 _DATASET_STD_DEVS,
             )

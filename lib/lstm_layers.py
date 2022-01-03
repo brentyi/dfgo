@@ -42,7 +42,7 @@ class BiLstm(nn.Module):
         self.forward_lstm = UniLstm()
         self.backward_lstm = UniLstm()
 
-    def __call__(self, carry: Tuple[jnp.ndarray, jnp.ndarray], x: jnp.ndarray):
+    def __call__(self, carry: Tuple[jnp.ndarray, jnp.ndarray], x: jnp.ndarray):  # type: ignore
         batch_size = x.shape[0]
 
         # Forward LSTM.

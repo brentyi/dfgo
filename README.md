@@ -37,6 +37,17 @@ Code release for our IROS 2021 conference paper:
 <sup>2</sup><em>Max Planck Institute for Intelligent Systems,
 `akloss@tue.mpg.de`</em>
 
+
+**Bibtex:**
+```
+@inproceedings{yi2021iros,
+    author={Brent Yi and Michelle Lee and Alina Kloss and Roberto Mart\'in-Mart\'in and Jeannette Bohg},
+    title = {Differentiable Factor Graph Optimization for Learning Smoothers},
+    year = 2021,
+    BOOKTITLE = {2021 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)}
+}
+```
+
 ---
 
 This repository contains models, training scripts, and experimental results, and

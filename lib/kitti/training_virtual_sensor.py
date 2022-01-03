@@ -8,8 +8,6 @@ from jax import numpy as jnp
 
 from . import data, experiment_config, networks
 
-PRNGKey = jnp.ndarray
-
 
 @jax_dataclasses.pytree_dataclass
 class TrainState:
@@ -22,7 +20,7 @@ class TrainState:
     optimizer_state: optax.OptState
     cnn_model: networks.KittiVirtualSensor = jax_dataclasses.static_field()
     learnable_params: networks.KittiVirtualSensorParameters
-    prng_key: PRNGKey
+    prng_key: jax.random.KeyArray
     steps: int
     train: bool = jax_dataclasses.static_field()
 
@@ -57,7 +55,7 @@ class TrainState:
     def compute_loss(
         self,
         batch: data.KittiStructNormalized,
-        prng_key: PRNGKey,
+        prng_key: jax.random.KeyArray,
         learnable_params: Optional[networks.KittiVirtualSensorParameters] = None,
     ) -> Tuple[float, jnp.ndarray]:
 

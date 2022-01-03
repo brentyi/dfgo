@@ -1,3 +1,4 @@
+import pathlib
 from typing import Any, Optional, Tuple
 
 import fifteen
@@ -10,7 +11,6 @@ from .. import manifold_ekf, utils
 from . import data, experiment_config, fg_system, networks
 
 Pytree = Any
-PRNGKey = jnp.ndarray
 
 
 DiskEkf = manifold_ekf.EkfDefinition[fg_system.State, jnp.ndarray, None]
@@ -44,7 +44,8 @@ class TrainState:
         # Load position CNN
         cnn_model, cnn_params = networks.make_position_cnn(seed=config.random_seed)
         cnn_params = fifteen.experiments.Experiment(
-            identifier=config.pretrained_virtual_sensor_identifier.format(
+            data_dir=pathlib.Path("./experiments/")
+            / config.pretrained_virtual_sensor_identifier.format(
                 dataset_fold=config.dataset_fold
             )
         ).restore_checkpoint(cnn_params, prefix="best_val_params_")

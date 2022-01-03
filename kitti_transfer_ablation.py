@@ -1,4 +1,5 @@
 import dataclasses
+import pathlib
 
 import dcargs
 import fifteen
@@ -20,10 +21,12 @@ def main(args: Args) -> None:
     for dataset_fold in tqdm(range(10)):
         # Experiments to transfer noise models across
         ekf_experiment = fifteen.experiments.Experiment(
-            identifier=args.ekf_experiment_identifier.format(dataset_fold=dataset_fold)
+            data_dir=pathlib.Path("./experiments/")
+            / args.ekf_experiment_identifier.format(dataset_fold=dataset_fold)
         ).assert_exists()
         fg_experiment = fifteen.experiments.Experiment(
-            identifier=args.fg_experiment_identifier.format(dataset_fold=dataset_fold)
+            data_dir=pathlib.Path("./experiments/")
+            / args.fg_experiment_identifier.format(dataset_fold=dataset_fold)
         ).assert_exists()
 
         # Read experiment configurations for each experiment
@@ -67,10 +70,12 @@ def main(args: Args) -> None:
 
         # Write metrics to kitti
         fifteen.experiments.Experiment(
-            identifier=f"kitti/ekf/hetero/trained_on_fg/fold_{dataset_fold}"
+            data_dir=pathlib.Path("./experiments/")
+            / f"kitti/ekf/hetero/trained_on_fg/fold_{dataset_fold}"
         ).clear().write_metadata("best_val_metrics", ekf_metrics)
         fifteen.experiments.Experiment(
-            identifier=f"kitti/fg/hetero/trained_on_ekf/fold_{dataset_fold}"
+            data_dir=pathlib.Path("./experiments/")
+            / f"kitti/fg/hetero/trained_on_ekf/fold_{dataset_fold}"
         ).clear().write_metadata("best_val_metrics", fg_metrics)
 
 

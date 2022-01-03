@@ -1,6 +1,7 @@
 """Filter training script for visual tracking task. Note that this is implemented as an
 EKF, but since the dynamics and observation model are linear we end up with a standard
 Kalman filter."""
+import pathlib
 
 import dcargs
 import fifteen
@@ -11,7 +12,8 @@ from lib import disk, utils, validation_tracker
 
 def main(config: disk.experiment_config.EkfExperimentConfig) -> None:
     experiment = fifteen.experiments.Experiment(
-        identifier=config.experiment_identifier.format(dataset_fold=config.dataset_fold)
+        data_dir=pathlib.Path("./experiments/")
+        / config.experiment_identifier.format(dataset_fold=config.dataset_fold)
     ).clear()
     experiment.write_metadata("experiment_config", config)
     experiment.write_metadata("git_commit_hash", utils.get_git_commit_hash())

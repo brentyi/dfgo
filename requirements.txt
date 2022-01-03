@@ -1,14 +1,15 @@
-jax==0.2.18
-jaxlib==0.1.70
-flax==0.3.2
-jaxlie
+jax==0.2.21
+jaxlib==0.1.71
+flax==0.3.6
+jaxlie==1.2.9
+numpy==1.21
 dcargs
-git+git://github.com/brentyi/jaxfg@master
-jax_dataclasses
+git+https://github.com/brentyi/jaxfg.git@278352bd3a06661ba1c537443ecae626dfc6637c
+jax_dataclasses==1.2.0
 tqdm
 fannypack
 termcolor
 # tensorflow is needed for tensorboard logging in JAX
 tensorflow
 types-termcolor
-git+https://github.com/brentyi/fifteen.git@672446c3cd21ca35d6936a9fb0daa3cab9ba0a36
+git+https://github.com/brentyi/fifteen.git@208e62ab23722fd8e6d82ed62fc87823f53867a3

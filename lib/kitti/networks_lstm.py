@@ -19,13 +19,13 @@ class KittiLstm(nn.Module):
     bidirectional: bool
 
     @nn.compact
-    def __call__(self, inputs: data.KittiStructNormalized, train: bool) -> jaxlie.SE2:
+    def __call__(self, inputs: data.KittiStructNormalized, train: bool) -> jaxlie.SE2:  # type: ignore
         N, T = inputs.get_batch_axes()
         stacked_images = inputs.get_stacked_image()
         assert stacked_images.shape == (N, T, 50, 150, 6)
 
         # Initial carry by encoding ground-truth initial state
-        # initial_carry = nn.Dense(32, kernel_init=networks.relu_layer_init)(
+        # initial_carry = nn.Dense(features=32, kernel_init=networks.relu_layer_init)(
         #     jnp.stack(
         #         [
         #             inputs.x[:, 0],
@@ -40,7 +40,7 @@ class KittiLstm(nn.Module):
         # )
         # assert initial_carry.shape == (N, 32)
         # initial_carry = nn.relu(initial_carry)
-        # initial_carry = nn.Dense(32, kernel_init=networks.linear_layer_init)(
+        # initial_carry = nn.Dense(features=32, kernel_init=networks.linear_layer_init)(
         #     initial_carry
         # )
         # initial_carry = (initial_carry, initial_carry)
@@ -62,9 +62,9 @@ class KittiLstm(nn.Module):
             assert x.shape == (N, T, 64)
 
         # Output
-        x = nn.Dense(64, kernel_init=networks.relu_layer_init)(x)
+        x = nn.Dense(features=64, kernel_init=networks.relu_layer_init)(x)
         x = nn.relu(x)
-        x = nn.Dense(4, kernel_init=networks.linear_layer_init)(x)
+        x = nn.Dense(features=4, kernel_init=networks.linear_layer_init)(x)
         assert x.shape == (N, T, 4)
 
         unnormed_outputs = data.KittiStructNormalized(

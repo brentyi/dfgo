@@ -10,8 +10,6 @@ from jax import numpy as jnp
 
 from . import data, experiment_config, fg_system, fg_utils
 
-PRNGKey = jnp.ndarray
-
 
 def compute_loss(
     graph: jaxfg.core.StackedFactorGraph,
@@ -20,7 +18,7 @@ def compute_loss(
         experiment_config.JointNllLossConfig,
         experiment_config.SurrogateLossConfig,
     ],
-    prng_key: jnp.ndarray,
+    prng_key: jax.random.KeyArray,
 ) -> jnp.ndarray:
     """Given an updated factor graph, ground-truth trajectory, and loss config, compute
     a single-trajectory loss."""
@@ -37,7 +35,7 @@ def _compute_surrogate_loss(
     graph: jaxfg.core.StackedFactorGraph,
     trajectory_raw: data.KittiStructRaw,
     loss_config: experiment_config.SurrogateLossConfig,
-    prng_key: PRNGKey,
+    prng_key: jax.random.KeyArray,
 ) -> jnp.ndarray:
     """Compute an end-to-end loss."""
     timesteps: int = len(tuple(graph.get_variables()))

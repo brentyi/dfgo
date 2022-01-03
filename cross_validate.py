@@ -131,7 +131,8 @@ def main(args: Args) -> None:
         for fold in range(num_folds):
             # Read evaluation metrics
             experiment = fifteen.experiments.Experiment(
-                identifier=f"{experiment_name}/fold_{fold}",
+                data_dir=pathlib.Path("./experiments/")
+                / f"{experiment_name}/fold_{fold}",
                 verbose=False,
             )
             try:

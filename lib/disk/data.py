@@ -64,7 +64,7 @@ class DiskStructRaw(_DiskStruct):
         return DiskStructNormalized(
             **jax.tree_map(
                 _norm,
-                vars(self),
+                jax_dataclasses.asdict(self),
                 _DATASET_MEANS,
                 _DATASET_STD_DEVS,
             )
@@ -88,7 +88,7 @@ class DiskStructNormalized(_DiskStruct):
         return DiskStructRaw(
             **jax.tree_map(
                 _unnorm,
-                vars(self),
+                jax_dataclasses.asdict(self),
                 _DATASET_MEANS,
                 _DATASET_STD_DEVS,
             )

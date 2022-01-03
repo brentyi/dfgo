@@ -13,7 +13,6 @@ from . import data, experiment_config, fg_losses, fg_utils, networks
 
 Pytree = Any
 LearnableParams = Pytree
-PRNGKey = jnp.ndarray
 
 
 @jax_dataclasses.pytree_dataclass
@@ -45,7 +44,7 @@ class TrainState:
 
     graph_template: jaxfg.core.StackedFactorGraph
 
-    prng_key: PRNGKey
+    prng_key: jax.random.KeyArray
     steps: int
     train: bool = (
         jax_dataclasses.static_field()
@@ -113,7 +112,7 @@ class TrainState:
         self,
         graph_template: jaxfg.core.StackedFactorGraph,
         trajectory: data.KittiStructNormalized,
-        prng_key: PRNGKey,
+        prng_key: jax.random.KeyArray,
         *,
         trajectory_raw: Optional[data.KittiStructRaw] = None,
         learnable_params: Optional[networks.LearnableParams] = None,
@@ -166,7 +165,7 @@ class TrainState:
         def compute_loss_single(
             learnable_params: LearnableParams,
             trajectory: data.KittiStructNormalized,
-            prng_key: PRNGKey,
+            prng_key: jax.random.KeyArray,
         ) -> Tuple[jnp.ndarray, _TrainingPerSampleMetadata]:
             """Compute training loss for a single trajectory."""
 
@@ -194,7 +193,8 @@ class TrainState:
             return loss, metadata
 
         def compute_loss(
-            learnable_params: LearnableParams, prng_key: PRNGKey
+            learnable_params: LearnableParams,
+            prng_key: jax.random.KeyArray,
         ) -> Tuple[jnp.ndarray, _TrainingPerSampleMetadata]:
             """Compute average loss for all trajectories in the batch."""
             batch_size: int = batched_trajectory.x.shape[0]

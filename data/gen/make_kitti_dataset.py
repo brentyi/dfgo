@@ -18,6 +18,7 @@ import sys
 
 import fannypack
 import fifteen
+import jax_dataclasses
 import numpy as onp
 from PIL import Image
 from tqdm.auto import tqdm
@@ -157,7 +158,7 @@ if __name__ == "__main__":
             traj_file.resize(2)
 
             # Load data from first camera
-            traj_file[0] = vars(
+            traj_file[0] = jax_dataclasses.asdict(
                 load_data(
                     pose_txt=directory.parent / f"{dataset_id}_image1.txt",
                     image_dir=directory / "image_2",
@@ -165,7 +166,7 @@ if __name__ == "__main__":
             )
 
             # Load data from second camera
-            traj_file[1] = vars(
+            traj_file[1] = jax_dataclasses.asdict(
                 load_data(
                     pose_txt=directory.parent / f"{dataset_id}_image2.txt",
                     image_dir=directory / "image_3",

@@ -4,12 +4,9 @@ import jax
 import jax_dataclasses
 import numpy as onp
 import torch
-from jax import numpy as jnp
 
 from .. import validation_tracker
 from . import data, training_virtual_sensor
-
-PRNGKey = jnp.ndarray
 
 
 def make_compute_metrics(

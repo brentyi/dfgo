@@ -10,7 +10,6 @@ from jax import numpy as jnp
 from .. import utils
 from . import data, experiment_config, math_utils, networks_lstm
 
-PRNGKey = jnp.ndarray  # TODO: we should standardize PRNG vs Prng
 LearnableParams = Any
 
 
@@ -25,7 +24,7 @@ class TrainState:
     lstm: networks_lstm.KittiLstm = jax_dataclasses.static_field()
     learnable_params: LearnableParams
 
-    prng_key: PRNGKey
+    prng_key: jax.random.KeyArray
     steps: int
     train: bool = jax_dataclasses.static_field()
 
@@ -80,7 +79,7 @@ class TrainState:
         self, batch: data.KittiStructNormalized
     ) -> Tuple["TrainState", fifteen.experiments.TensorboardLogData]:
         def compute_loss(
-            learnable_params: LearnableParams, prng_key: PRNGKey
+            learnable_params: LearnableParams, prng_key: jax.random.KeyArray
         ) -> Tuple[jnp.ndarray, fifteen.experiments.TensorboardLogData]:
             """Compute average loss for all trajectories in the batch."""
             (_N, _T) = batch.get_batch_axes()

@@ -107,6 +107,6 @@ def make_compute_metrics(
             )
 
         metrics_avg: _ValidationMetrics = jax.tree_map(lambda x: x / len(eval_dataset), metrics_summed)  # type: ignore
-        return metrics_avg.m_per_m, vars(metrics_avg)
+        return metrics_avg.m_per_m, jax_dataclasses.asdict(metrics_avg)
 
     return compute_metrics
