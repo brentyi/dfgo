@@ -10,13 +10,11 @@ from . import data, data_loading, training_ekf
 def make_compute_metrics(
     dataset_fold: int, progress_bar: bool = False
 ) -> Callable[[training_ekf.TrainState], validation_tracker.ValidationMetrics]:
-
     eval_trajectories = data_loading.load_trajectories(train=False, fold=dataset_fold)
 
     def compute_metrics(
         train_state: training_ekf.TrainState,
     ) -> validation_tracker.ValidationMetrics:
-
         batch: data.DiskStructNormalized
         mse: float = 0.0
 

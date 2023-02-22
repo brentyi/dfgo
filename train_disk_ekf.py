@@ -3,8 +3,8 @@ EKF, but since the dynamics and observation model are linear we end up with a st
 Kalman filter."""
 import pathlib
 
-import dcargs
 import fifteen
+import tyro
 from tqdm.auto import tqdm
 
 from lib import disk, utils, validation_tracker
@@ -58,7 +58,7 @@ def main(config: disk.experiment_config.EkfExperimentConfig) -> None:
 
 if __name__ == "__main__":
     fifteen.utils.pdb_safety_net()
-    config = dcargs.parse(
+    config = tyro.cli(
         disk.experiment_config.EkfExperimentConfig,
         description=__doc__,
     )

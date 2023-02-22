@@ -22,7 +22,7 @@ def make_observation(
                 velocities.angular_vel,
             ]
         ),
-        cov=jnp.diag(1.0 / vision_sqrt_precision_diagonal ** 2),
+        cov=jnp.diag(1.0 / vision_sqrt_precision_diagonal**2),
     )
 
 
@@ -231,7 +231,7 @@ class TrainState:
                 belief,
                 control_input=None,
                 dynamics_cov=jnp.diag(
-                    1.0 / uncertainties.dynamics_sqrt_precision_diagonal ** 2
+                    1.0 / uncertainties.dynamics_sqrt_precision_diagonal**2
                 ),
             )
 

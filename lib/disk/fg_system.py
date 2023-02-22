@@ -16,7 +16,7 @@ DYNAMICS_SQRT_PRECISION_DIAGONAL = 1.0 / onp.array(
 )
 assert DYNAMICS_SQRT_PRECISION_DIAGONAL.shape == (4,)
 
-DYNAMICS_COVARIANCE_DIAGONAL = 1.0 / DYNAMICS_SQRT_PRECISION_DIAGONAL ** 2
+DYNAMICS_COVARIANCE_DIAGONAL = 1.0 / DYNAMICS_SQRT_PRECISION_DIAGONAL**2
 
 
 @jax_dataclasses.pytree_dataclass
@@ -30,7 +30,7 @@ class State:
     def predict_next(self) -> "State":
         # Predict the state after our dynamics update
         spring_force = -SPRING_CONSTANT * self.position
-        drag_force = -DRAG_CONSTANT * jnp.sign(self.velocity) * (self.velocity ** 2)
+        drag_force = -DRAG_CONSTANT * jnp.sign(self.velocity) * (self.velocity**2)
         return State(
             position=self.position + self.velocity,  # type: ignore
             velocity=self.velocity + spring_force + drag_force,
@@ -84,7 +84,6 @@ class DynamicsFactorVariableValues(NamedTuple):
 
 @jax_dataclasses.pytree_dataclass
 class DynamicsFactor(jaxfg.core.FactorBase[DynamicsFactorVariableValues]):
-
     noise_model: jaxfg.noises.DiagonalGaussian
 
     @staticmethod

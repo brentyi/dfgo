@@ -5,10 +5,10 @@ import pathlib
 from typing import Dict, List, Optional, Tuple
 
 import beautifultable
-import dcargs
 import fifteen
 import numpy as onp
 import termcolor
+import tyro
 
 MetricDict = Dict[str, float]
 
@@ -165,5 +165,5 @@ def main(args: Args) -> None:
 
 
 if __name__ == "__main__":
-    args = dcargs.parse(Args)
+    args = tyro.cli(Args)
     main(args)

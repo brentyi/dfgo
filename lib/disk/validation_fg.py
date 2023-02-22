@@ -36,7 +36,6 @@ def _mse(
 def make_compute_metrics(
     dataset_fold: int, progress_bar: bool = False
 ) -> Callable[[training_fg.TrainState], validation_tracker.ValidationMetrics]:
-
     eval_trajectories = data_loading.load_trajectories(train=False, fold=dataset_fold)
     (trajectory_length,) = eval_trajectories[0].get_batch_axes()
     graph_template = fg_utils.make_factor_graph(trajectory_length=trajectory_length)
@@ -44,7 +43,6 @@ def make_compute_metrics(
     def compute_metrics(
         train_state: training_fg.TrainState,
     ) -> validation_tracker.ValidationMetrics:
-
         batch: data.DiskStructNormalized
         mse: float = 0.0
 

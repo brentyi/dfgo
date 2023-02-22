@@ -32,7 +32,6 @@ class TrainState:
     def initialize(
         config: experiment_config.LstmExperimentConfig, train: bool
     ) -> "TrainState":
-
         # Neural network setup
         lstm = networks_lstm.KittiLstm(bidirectional=config.bidirectional)
         prng_key, dropout_key = jax.random.split(jax.random.PRNGKey(config.random_seed))
@@ -99,7 +98,7 @@ class TrainState:
                 y=translation_delta[..., 1],
             ).normalize(scale_only=True)
             translation_loss = jnp.mean(
-                normalized_delta.x ** 2 + normalized_delta.y ** 2
+                normalized_delta.x**2 + normalized_delta.y**2
             )
 
             rotation_loss = jnp.mean(

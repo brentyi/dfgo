@@ -1,8 +1,8 @@
 """Pre-training script for visual odometry task virtual sensors."""
 import pathlib
 
-import dcargs
 import fifteen
+import tyro
 from tqdm.auto import tqdm
 
 from lib import kitti, utils, validation_tracker
@@ -69,7 +69,7 @@ def main(
 
 if __name__ == "__main__":
     fifteen.utils.pdb_safety_net()
-    config = dcargs.parse(
+    config = tyro.cli(
         kitti.experiment_config.VirtualSensorPretrainingExperimentConfig,
         description=__doc__,
     )

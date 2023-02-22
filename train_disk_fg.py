@@ -2,8 +2,8 @@
 
 import pathlib
 
-import dcargs
 import fifteen
+import tyro
 from tqdm.auto import tqdm
 
 from lib import disk, utils, validation_tracker
@@ -57,7 +57,7 @@ def main(config: disk.experiment_config.FactorGraphExperimentConfig) -> None:
 
 if __name__ == "__main__":
     fifteen.utils.pdb_safety_net()
-    config = dcargs.parse(
+    config = tyro.cli(
         disk.experiment_config.FactorGraphExperimentConfig,
         description=__doc__,
     )

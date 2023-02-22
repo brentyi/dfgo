@@ -2,7 +2,7 @@
 
 Note: we'd likely structure these very differently if we were to rewrite this code,
 particularly to replace inheritance with nested dataclasses for common fields. (the
-latter is now supported in `dcargs`)"""
+latter is now supported in `tyro`)"""
 
 import dataclasses
 import enum
@@ -60,7 +60,6 @@ class VirtualSensorLossEnum(utils.StringEnum):
 class VirtualSensorPretrainingExperimentConfig(
     OptimizerConfig, DatasetConfig, ConfigurationBase
 ):
-
     experiment_identifier: str = "kitti/pretrain_virtual_sensor/fold_{dataset_fold}"
     loss: VirtualSensorLossEnum = VirtualSensorLossEnum.MSE
 
@@ -98,7 +97,7 @@ class InitializationStrategyEnum(utils.StringEnum):
 class JointNllLossConfig:
     """Joint NLL loss configuration.
 
-    Empty dataclass to match syntax used for defining subparsers in dcargs."""
+    Empty dataclass to match syntax used for defining subparsers in tyro."""
 
     pass
 

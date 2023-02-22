@@ -17,7 +17,6 @@ def make_compute_metrics(
     def compute_metrics(
         train_state: training_virtual_sensor.TrainState,
     ) -> validation_tracker.ValidationMetrics:
-
         assert isinstance(eval_dataloader.dataset, data.KittiSingleStepDataset)
 
         # Eval mode

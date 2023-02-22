@@ -139,7 +139,6 @@ class TrainState:
     def training_step(
         self, batch: data.DiskStructNormalized
     ) -> Tuple["TrainState", fifteen.experiments.TensorboardLogData]:
-
         # Shape checks
         (batch_size, sequence_length) = batch.get_batch_axes()
         assert sequence_length == self.config.train_sequence_length
@@ -165,7 +164,6 @@ class TrainState:
             elif (
                 self.config.loss is experiment_config.FactorGraphLossEnum.SURROGATE_LOSS
             ):
-
                 # Compute end-to-end loss
                 solved_assignments = graph.solve(
                     initial_assignments=gt_assignments,

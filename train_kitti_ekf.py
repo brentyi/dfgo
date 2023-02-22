@@ -2,8 +2,8 @@
 
 import pathlib
 
-import dcargs
 import fifteen
+import tyro
 from tqdm.auto import tqdm
 
 from lib import kitti, utils, validation_tracker
@@ -58,7 +58,5 @@ def main(config: kitti.experiment_config.EkfExperimentConfig) -> None:
 
 
 if __name__ == "__main__":
-    config = dcargs.parse(
-        kitti.experiment_config.EkfExperimentConfig, description=__doc__
-    )
+    config = tyro.cli(kitti.experiment_config.EkfExperimentConfig, description=__doc__)
     main(config)

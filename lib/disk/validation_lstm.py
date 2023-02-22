@@ -12,7 +12,6 @@ from . import data, data_loading, training_lstm
 def make_compute_metrics(
     dataset_fold: int,
 ) -> Callable[[training_lstm.TrainState], validation_tracker.ValidationMetrics]:
-
     dataloader = torch.utils.data.DataLoader(
         data_loading.DiskSubsequenceDataset(
             train=False,
@@ -37,7 +36,6 @@ def make_compute_metrics(
     def compute_metrics(
         train_state: training_lstm.TrainState,
     ) -> validation_tracker.ValidationMetrics:
-
         mse = onp.zeros(2)
 
         for batch in dataloader:

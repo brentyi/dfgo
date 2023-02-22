@@ -1,9 +1,9 @@
 import dataclasses
 import pathlib
 
-import dcargs
 import fifteen
 import jax_dataclasses
+import tyro
 from tqdm.auto import tqdm
 
 from lib import kitti
@@ -80,5 +80,5 @@ def main(args: Args) -> None:
 
 
 if __name__ == "__main__":
-    args = dcargs.parse(Args)
+    args = tyro.cli(Args)
     main(args)

@@ -58,7 +58,6 @@ class TrainState:
         prng_key: jax.random.KeyArray,
         learnable_params: Optional[networks.KittiVirtualSensorParameters] = None,
     ) -> Tuple[float, jnp.ndarray]:
-
         if learnable_params is None:
             learnable_params = self.learnable_params
 

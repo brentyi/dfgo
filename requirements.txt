@@ -3,7 +3,7 @@ jaxlib==0.1.71
 flax==0.3.6
 jaxlie==1.2.9
 numpy==1.21
-dcargs
+tyro
 git+https://github.com/brentyi/jaxfg.git@278352bd3a06661ba1c537443ecae626dfc6637c
 jax_dataclasses==1.2.0
 tqdm

@@ -124,7 +124,6 @@ def load_data(
 
 
 if __name__ == "__main__":
-
     fifteen.utils.pdb_safety_net()
 
     path: pathlib.Path
@@ -143,7 +142,6 @@ if __name__ == "__main__":
     assert output_dir.is_dir()
 
     for directory in directories:
-
         dataset_id: str = directory.stem
         assert (
             dataset_id.isdigit() and len(dataset_id) == 2

@@ -39,7 +39,6 @@ def make_regress_uncertainties(
         return regress_uncertainties, 1.0 / 3.60
 
     elif noise_model is experiment_config.NoiseModelEnum.HETEROSCEDASTIC:
-
         mlp, learnable_params = make_uncertainty_mlp(seed=seed)
 
         def regress_uncertainties(

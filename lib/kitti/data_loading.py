@@ -168,7 +168,6 @@ def make_overlapping_subsequences(
     subsequence_length: int = 100,
     overlap_length: int = 50,  # 0 => no overlap
 ) -> List[data.KittiStructRaw]:
-
     assert overlap_length < subsequence_length
 
     # Load trajectories!

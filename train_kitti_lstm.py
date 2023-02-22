@@ -2,8 +2,8 @@
 
 import pathlib
 
-import dcargs
 import fifteen
+import tyro
 from tqdm.auto import tqdm
 
 from lib import kitti, utils, validation_tracker
@@ -61,7 +61,5 @@ def main(config: kitti.experiment_config.LstmExperimentConfig) -> None:
 
 if __name__ == "__main__":
     fifteen.utils.pdb_safety_net()
-    config = dcargs.parse(
-        kitti.experiment_config.LstmExperimentConfig, description=__doc__
-    )
+    config = tyro.cli(kitti.experiment_config.LstmExperimentConfig, description=__doc__)
     main(config)

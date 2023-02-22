@@ -156,7 +156,7 @@ def _compute_surrogate_loss(
             == (timesteps, 2)
         )
         translation_delta = stacked_solved.pose.translation() - gt_translation
-        return jnp.mean(translation_delta ** 2)
+        return jnp.mean(translation_delta**2)
 
     elif (
         loss_config.supervision
@@ -166,7 +166,7 @@ def _compute_surrogate_loss(
         gt_velocities = trajectory_raw.get_stacked_velocity()
         assert gt_velocities.shape == stacked_solved.velocities.shape == (timesteps, 2)
         velocity_delta: jnp.ndarray = gt_velocities - stacked_solved.velocities
-        return jnp.mean(velocity_delta ** 2)
+        return jnp.mean(velocity_delta**2)
 
     else:
         assert False

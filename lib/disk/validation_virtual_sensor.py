@@ -8,7 +8,6 @@ def compute_metrics(
     eval_dataloader: torch.utils.data.DataLoader[data.DiskStructNormalized],
     train_state: training_virtual_sensor.TrainState,
 ) -> validation_tracker.ValidationMetrics:
-
     batch: data.DiskStructNormalized
     total_loss: float = 0.0
     for batch in eval_dataloader:

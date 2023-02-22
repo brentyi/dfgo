@@ -72,7 +72,6 @@ graph_template: jaxfg.core.StackedFactorGraph
 def make_compute_metrics(
     eval_dataset: torch.utils.data.Dataset[data.KittiStructNormalized],
 ) -> Callable[[training_fg.TrainState], validation_tracker.ValidationMetrics]:
-
     graph_template = fg_utils.make_factor_graph(sequence_length=100)
 
     def compute_metrics(

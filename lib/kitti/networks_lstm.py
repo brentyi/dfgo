@@ -74,7 +74,11 @@ class KittiLstm(nn.Module):
         )
 
         # Outputs will be relative poses
-        output: jaxlie.SE2 = jax.vmap(jax.vmap(jaxlie.SE2.from_xy_theta,))(
+        output: jaxlie.SE2 = jax.vmap(
+            jax.vmap(
+                jaxlie.SE2.from_xy_theta,
+            )
+        )(
             x=unnormed_outputs.x,
             y=unnormed_outputs.y,
             theta=jnp.arctan2(x[:, :, 2], x[:, :, 3]),
